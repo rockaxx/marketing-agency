@@ -1,0 +1,13 @@
+# Publish the compiled Next.js output, never the repository root.
+[build]
+  base = "."
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Use Netlify's current Next.js adapter for SSR, proxy, and route handlers.
+# No version pin: Netlify resolves its maintained adapter at build time.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

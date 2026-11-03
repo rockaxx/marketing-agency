@@ -82,6 +82,18 @@ Provider calls time out. Success requires a successful Resend HTTP response **an
 
 The repository is deployment-ready but not deployed automatically: the requested Next.js/Vercel architecture is retained rather than converted to a different host runtime.
 
+## Deploy on Netlify
+
+The tracked `netlify.toml` sets the repository root as base, `npm run build` as the build command, `.next` as the publish directory, Node 22, and the maintained Next.js adapter. Keep the app's server rendering and route handler; do not deploy the repository root or add a static SPA catch-all redirect.
+
+1. Import `rockaxx/marketing-agency` from GitHub and use branch `main`. Leave the package directory unset; this is a single application at the repository root.
+2. Set `NEXT_PUBLIC_SITE_URL` in Netlify environment variables to the actual HTTPS site URL, for example `https://sparkly-klepon-2e15ce.netlify.app`. Add the Resend variables only when testing real email delivery.
+3. Trigger a new deployment of the latest commit. The build log should run `next build` and the Next.js adapter, with generated server/edge functions. A green deploy alone does not prove that the application was built.
+4. If the deployed file browser lists `src/`, `tests/`, `vendor/`, and `package.json` at the public root, it published source files instead of the Next.js build. Confirm that builds are enabled, that the latest commit contains `netlify.toml`, and that the resolved publish directory is `.next`, then use **Clear cache and deploy site** (or the equivalent retry without cache action).
+5. Open `/`, `/sk`, `/en`, and a contact page. `/` should redirect to `/sk`. For visual demos without email credentials, the contact endpoint deliberately returns an explicit configuration error.
+
+Netlify setup follows its [Next.js adapter documentation](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/). A successful local Next.js build is not evidence of a successful hosted Netlify adapter build.
+
 ## QA
 
 With a fresh server running and no Resend credentials:
